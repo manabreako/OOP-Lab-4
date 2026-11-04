@@ -1,3 +1,8 @@
+/**
+ * @file BoardLoader.cpp
+ * @brief Реализация загрузки и проверки шахматных фигур из файла.
+ */
+
 #include "BoardLoader.h"
 #include "Rook.h"
 #include "Bishop.h"
@@ -8,6 +13,12 @@
 #include <stdexcept>
 #include <memory>
 
+/**
+ * @brief Загружает из файла 12 фигур, проверяет типы, цвета, координаты и минимальное количество фигур каждого типа.
+ * @param filename Путь к файлу с данными фигур.
+ * @return Вектор указателей на загруженные фигуры.
+ * @throws std::runtime_error При ошибке открытия, чтения или проверки файла.
+ */
 std::vector<ChessPiece*> BoardLoader::loadFromFile(
     const std::string& filename) {
 
