@@ -1,0 +1,98 @@
+@startuml
+title UML-диаграмма программы «Шахматные фигуры»
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "Иерархия шахматных фигур" {
+
+    abstract class ChessPiece {
+        # color : string
+        # x : int
+        # y : int
+        # whiteCount : int {static}
+        # blackCount : int {static}
+        + ChessPiece(color, x, y)
+        + ChessPiece(other)
+        + operator=(other)
+        + ~ChessPiece()
+        {abstract} + canMoveTo(x, y) : bool
+        {abstract} + getSymbol() : char
+        + printInfo() : void
+        {static} + getWhiteCount() : int
+        {static} + getBlackCount() : int
+        {static} + validateBoardState() : bool
+    }
+
+    class SlidingPiece {
+        # canMoveStraight : bool
+        # canMoveDiagonal : bool
+        + canMoveTo(x, y) : bool
+        + printInfo() : void
+    }
+
+    class JumpingPiece {
+        + canMoveTo(x, y) : bool
+        + printInfo() : void
+    }
+
+    interface CombinedPiece {
+        + canMoveStraightOrDiagonal(x, y) : bool
+    }
+
+    class Rook {
+        + getSymbol() : char
+        + printInfo() : void
+    }
+
+    class Bishop {
+        + getSymbol() : char
+        + printInfo() : void
+    }
+
+    class Queen {
+        + getSymbol() : char
+        + canMoveTo(x, y) : bool
+        + canMoveStraightOrDiagonal(x, y) : bool
+        + printInfo() : void
+    }
+
+    class Knight {
+        + getSymbol() : char
+        + printInfo() : void
+    }
+
+    ChessPiece <|-- SlidingPiece
+    ChessPiece <|-- JumpingPiece
+    SlidingPiece <|-- Rook
+    SlidingPiece <|-- Bishop
+    SlidingPiece <|-- Queen
+    CombinedPiece <|.. Queen
+    JumpingPiece <|-- Knight
+}
+
+package "Загрузка данных" {
+    class BoardLoader {
+        {static} + loadFromFile(filename) : vector<ChessPiece*>
+    }
+
+    BoardLoader ..> ChessPiece : создание объектов
+}
+
+package "Работа программы" {
+    class Main {
+        + main() : int
+        - загрузка фигур
+        - полиморфизм
+        - копирование объектов
+        - проверка счётчиков
+        - обработка исключений
+    }
+}
+
+Main --> BoardLoader : loadFromFile()
+Main --> ChessPiece : вызов виртуальных методов
+Main ..> Rook : копирование и присваивание
+Main ..> "pieces.txt" : чтение тестовых данных
+
+@enduml
