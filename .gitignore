@@ -1,0 +1,4 @@
+﻿build/*.o
+build/*.exe
+build/*.dll
+build/*.a
